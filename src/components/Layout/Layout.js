@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link, Route, Routes, useMatch, useResolvedPath } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Layout.scss";
 
@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
           </header>
         </Container>
       </Navbar>
-      <Container>{children}</Container>
+      <Container style={{ position: "relative" }}>{children}</Container>
     </div>
   );
 };

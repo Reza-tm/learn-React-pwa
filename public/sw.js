@@ -22,14 +22,18 @@ self.addEventListener("install", (e) => {
   );
 });
 
-self.addEventListener("fetch", function (event) {
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      if (response) {
-        return response;
-      } else {
-        return fetch(event.request);
-      }
-    })
-  );
+// self.addEventListener("activate", (e) => {
+// let expectedCacheNames = Object.values(CURRENT_CACHE);
+//   e.waitUntil(
+//     caches
+//       .keys()
+//       .then((cachNames) => Promise.all(cashNames.fillter((cashName) => cashName.delete(cashName !== expectedCacheNames))))
+//   );
+// return self.client.clime();
+// });
+
+// self.addEventListener("fetch", (event) => {
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(caches.match(event.request).then((response) => (response ? response : fetch(event.request))));
 });

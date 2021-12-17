@@ -5,34 +5,31 @@ const CURRENT_CACHE = {
 };
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CURRENT_CACHE.static).then((cach) => cach.add("../src/offline.html")));
+  e.waitUntil(
+    caches
+      .open(CURRENT_CACHE.static)
+      .then((cache) =>
+        cache.addAll([
+          "/",
+          "/static/js/bundle.js",
+          "/build/react_devtools_backend.js",
+          "/js/dom.js",
+          "/js/js.js",
+          "/ws",
+          "/sw.js",
+        ])
+      )
+  );
 });
 
-self.addEventListener("activate", (e) => {
-  let expectedCacheNames = Object.values(CURRENT_CACHE);
-  //   e.waitUntil(
-  //     caches
-  //       .keys()
-  //       .then((cachNames) => Promise.all(cashNames.fillter((cashName) => cashName.delete(cashName !== expectedCacheNames))))
-  //   );
-});
-
-self.addEventListener("fetch", (event) => {
-  return event.respondWith(
-    caches.match(event.request).then((res) => {
-      if (res) return res;
-      return fetch(event.request)
-        .then((networkRes) => {
-          return caches.open(CURRENT_CACHE["dynamic"]).then((cache) => {
-            cache.put(event.request, networkRes);
-            return networkRes;
-          });
-        })
-        .catch((err) => {
-          return caches.open(CURRENT_CACHE["static"]).then((cach) => {
-            return caches.match("../src/offline.html");
-          });
-        });
+self.addEventListener("fetch", function (event) {
+  event.respondWith(
+    caches.match(event.request).then(function (response) {
+      if (response) {
+        return response;
+      } else {
+        return fetch(event.request);
+      }
     })
   );
 });

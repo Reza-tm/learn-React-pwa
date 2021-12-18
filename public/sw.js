@@ -1,4 +1,4 @@
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 1.5;
 const CURRENT_CACHE = {
   static: "catch-static-" + CACHE_VERSION,
   dynamic: "catch-dynamic-" + CACHE_VERSION,
@@ -13,6 +13,20 @@ self.addEventListener("install", (e) => {
       )
   );
 });
+
+self.addEventListener("activate", (event) =>
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CURRENT_CACHE.dynamic && cacheName !== CURRENT_CACHE.static) {
+            return caches.delete(cacheName);
+          }
+        })
+      )
+    )
+  )
+);
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(

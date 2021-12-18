@@ -9,15 +9,7 @@ self.addEventListener("install", (e) => {
     caches
       .open(CURRENT_CACHE.static)
       .then((cache) =>
-        cache.addAll([
-          "/",
-          "/static/js/bundle.js",
-          "/build/react_devtools_backend.js",
-          "/js/dom.js",
-          "/js/js.js",
-          "/ws",
-          "/sw.js",
-        ])
+        cache.addAll(["/", "/static/js/bundle.js", "/build/react_devtools_backend.js", "/js/dom.js", "/js/js.js", "/sw.js"])
       )
   );
 });
@@ -27,12 +19,14 @@ self.addEventListener("fetch", (event) => {
     caches.match(event.request).then((response) =>
       response
         ? response
-        : fetch(event.request).then((res) =>
-            caches.open(CURRENT_CACHE.dynamic).then((cache) => {
-              cache.put(event.request.url, res);
-              return res;
-            })
-          )
+        : fetch(event.request)
+            .then((res) =>
+              caches.open(CURRENT_CACHE.dynamic).then((cache) => {
+                cache.put(event.request.url, res.clone());
+                return res;
+              })
+            )
+            .catch((err) => {})
     )
   );
 });

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 1.5;
+const CACHE_VERSION = 1.6;
 const CURRENT_CACHE = {
   static: "catch-static-" + CACHE_VERSION,
   dynamic: "catch-dynamic-" + CACHE_VERSION,

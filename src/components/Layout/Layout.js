@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
           </header>
         </Container>
       </Navbar>
-      <Container style={{ position: "relative" }}>{children}</Container>
+      <Container style={{ padding: "20px 0" }}>{children}</Container>
     </div>
   );
 };

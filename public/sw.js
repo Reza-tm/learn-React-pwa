@@ -1,7 +1,7 @@
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 6;
 const CURRENT_CACHE = {
-  static: "catch-static-" + CACHE_VERSION,
-  dynamic: "catch-dynamic-" + CACHE_VERSION,
+  static: "cache-static-" + CACHE_VERSION,
+  dynamic: "cache-dynamic-" + CACHE_VERSION,
 };
 
 self.addEventListener("install", (e) => {
@@ -17,6 +17,7 @@ self.addEventListener("install", (e) => {
           "/js/dom.js",
           "/js/js.js",
           "/sw.js",
+          "https://httpbin.org/get",
         ])
       )
   );

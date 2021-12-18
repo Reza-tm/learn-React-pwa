@@ -3,7 +3,7 @@ import { Button, Card } from "react-bootstrap";
 
 const CustomeCard = ({ text, pic, title }) => {
   return (
-    <Card style={{ paddingTop: "15px" }}>
+    <Card>
       <Card.Img style={{ borderRadius: "0", objectFit: "cover" }} height={300} variant="top" src={pic} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>

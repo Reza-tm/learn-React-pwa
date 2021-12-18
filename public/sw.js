@@ -22,18 +22,17 @@ self.addEventListener("install", (e) => {
   );
 });
 
-// self.addEventListener("activate", (e) => {
-// let expectedCacheNames = Object.values(CURRENT_CACHE);
-//   e.waitUntil(
-//     caches
-//       .keys()
-//       .then((cachNames) => Promise.all(cashNames.fillter((cashName) => cashName.delete(cashName !== expectedCacheNames))))
-//   );
-// return self.client.clime();
-// });
-
-// self.addEventListener("fetch", (event) => {
-
 self.addEventListener("fetch", (event) => {
-  event.respondWith(caches.match(event.request).then((response) => (response ? response : fetch(event.request))));
+  event.respondWith(
+    caches.match(event.request).then((response) =>
+      response
+        ? response
+        : fetch(event.request).then((res) =>
+            caches.open(CURRENT_CACHE.dynamic).then((cache) => {
+              cache.put(event.request.url, res);
+              return res;
+            })
+          )
+    )
+  );
 });

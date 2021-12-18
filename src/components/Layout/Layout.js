@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
       <Navbar bg="dark" variant="dark" sticky="top">
         <Container className="navbar">
           <header>
-            <Nav defaultActiveKey={location == "/" ? "1" : "2"} variant="pills">
+            <Nav defaultActiveKey={location == "/" ? "1" : location == "/add" ? "2" : "3"} variant="pills">
               <Link to="/">
                 <Nav.Item>
                   <Nav.Link as="p" eventKey="1">

@@ -13,6 +13,16 @@ function App() {
         <Routes>
           <Route path="add" element={<AddPage />} />
           <Route path="/" element={<AppPage />} />
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <h2>404</h2>
+                <br />
+                <p>There's nothing here!</p>
+              </main>
+            }
+          />
         </Routes>
       </Layout>
     </div>

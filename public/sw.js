@@ -11,7 +11,7 @@ self.addEventListener("install", (e) => {
       .then((cache) =>
         cache.addAll([
           "/",
-          "/offline.js",
+          "/offline.html",
           "/static/js/bundle.js",
           "/build/react_devtools_backend.js",
           "/js/dom.js",

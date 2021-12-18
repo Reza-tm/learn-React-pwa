@@ -1,4 +1,4 @@
-const CACHE_VERSION = 1.6;
+const CACHE_VERSION = 2;
 const CURRENT_CACHE = {
   static: "catch-static-" + CACHE_VERSION,
   dynamic: "catch-dynamic-" + CACHE_VERSION,
@@ -9,7 +9,15 @@ self.addEventListener("install", (e) => {
     caches
       .open(CURRENT_CACHE.static)
       .then((cache) =>
-        cache.addAll(["/", "/static/js/bundle.js", "/build/react_devtools_backend.js", "/js/dom.js", "/js/js.js", "/sw.js"])
+        cache.addAll([
+          "/",
+          "/offline.js",
+          "/static/js/bundle.js",
+          "/build/react_devtools_backend.js",
+          "/js/dom.js",
+          "/js/js.js",
+          "/sw.js",
+        ])
       )
   );
 });
@@ -40,7 +48,7 @@ self.addEventListener("fetch", (event) => {
                 return res;
               })
             )
-            .catch((err) => {})
+            .catch((err) => caches.open(CURRENT_CACHE.static).then((response) => response.match("/offline.html")))
     )
   );
 });

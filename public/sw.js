@@ -1,4 +1,4 @@
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 const CURRENT_CACHE = {
   static: "catch-static-" + CACHE_VERSION,
   dynamic: "catch-dynamic-" + CACHE_VERSION,
@@ -38,17 +38,13 @@ self.addEventListener("activate", (event) =>
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) =>
-      response
-        ? response
-        : fetch(event.request)
-            .then((res) =>
-              caches.open(CURRENT_CACHE.dynamic).then((cache) => {
-                cache.put(event.request.url, res.clone());
-                return res;
-              })
-            )
-            .catch((err) => caches.open(CURRENT_CACHE.static).then((response) => response.match("/offline.html")))
-    )
+    fetch(event.request)
+      .then((res) =>
+        caches.open(CURRENT_CACHE.dynamic).then((cache) => {
+          cache.put(event.request.url, res.clone());
+          return res;
+        })
+      )
+      .catch((err) => caches.match(event.request))
   );
 });

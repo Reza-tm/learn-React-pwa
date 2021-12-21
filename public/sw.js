@@ -1,10 +1,5 @@
 importScripts("/dexie.js");
-
-var db = new Dexie("post-store");
-db.version(1).stores({
-  posts: "Title",
-});
-
+importScripts("/db.js");
 const CACHE_VERSION = 7;
 const CURRENT_CACHE = {
   static: "cache-static-" + CACHE_VERSION,
@@ -70,7 +65,6 @@ self.addEventListener("fetch", (event) => {
               .then((res) =>
                 caches.open(CURRENT_CACHE.dynamic).then((cache) => {
                   cache.put(event.request.url, res.clone());
-                  console.log(res, "[service worker]");
                   return res;
                 })
               )

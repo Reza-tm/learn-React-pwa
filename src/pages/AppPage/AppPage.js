@@ -11,23 +11,29 @@ const AppPage = () => {
   useEffect(() => {
     if ("caches" in window) {
       caches
-        .match("https://jsonplaceholder.typicode.com/users")
+        .match("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json")
         .then((res) => {
           console.log("cache done ");
           return res.json();
         })
         .then((data) => {
-          if (!isDataComing) {
-            setIsDataComing(data);
+          const array = [];
+          for (let key in data) {
+            array.push(data[key]);
           }
+          setIsDataComing(array);
         })
         .then((log) => console.log("from cache"));
     }
-    fetch("https://jsonplaceholder.typicode.com/posts")
+    fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json")
       .then((res) => res.json())
       .then((netData) => {
+        const array = [];
+        for (let key in netData) {
+          array.push(netData[key]);
+        }
         isNetResived = true;
-        setIsDataComing(netData);
+        setIsDataComing(array);
       })
       .then((log) => console.log("form net new"));
   }, []);
@@ -36,7 +42,7 @@ const AppPage = () => {
     <Row lg={3} md={2} xs={1}>
       {isDataComing.map((item, index) => (
         <Col style={{ padding: "10px auto" }}>
-          <CustomeCard text="React is best library for JS" title="React js" pic={reactPic} />
+          <CustomeCard text={item.Text} title={item.Title} pic={item.Image} />
         </Col>
       ))}
     </Row>

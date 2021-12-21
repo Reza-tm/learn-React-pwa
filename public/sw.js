@@ -11,7 +11,7 @@ self.addEventListener("install", (e) => {
       .then((cache) =>
         cache.addAll([
           "/",
-          "/offline.js",
+          "/offline.html",
           "/static/js/bundle.js",
           "/build/react_devtools_backend.js",
           "/js/dom.js",
@@ -38,18 +38,31 @@ self.addEventListener("activate", (event) =>
 );
 
 self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) =>
-      response
-        ? response
-        : fetch(event.request)
-            .then((res) =>
-              caches.open(CURRENT_CACHE.dynamic).then((cache) => {
-                cache.put(event.request.url, res.clone());
-                return res;
-              })
-            )
-            .catch((err) => caches.open(CURRENT_CACHE.static).then((response) => response.match("/offline.html")))
-    )
-  );
+  var url = "https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json";
+  if (event.request.url.indexOf(url) > -1) {
+    event.respondWith(
+      caches.open(CURRENT_CACHE.dynamic).then((cache) => {
+        return fetch(event.request).then((res) => {
+          cache.put(event.request, res.clone());
+          return res;
+        });
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then((response) =>
+        response
+          ? response
+          : fetch(event.request)
+              .then((res) =>
+                caches.open(CURRENT_CACHE.dynamic).then((cache) => {
+                  cache.put(event.request.url, res.clone());
+                  console.log(res, "[service worker]");
+                  return res;
+                })
+              )
+              .catch((err) => caches.open(CURRENT_CACHE.static).then((response) => response.match("/offline.html")))
+      )
+    );
+  }
 });

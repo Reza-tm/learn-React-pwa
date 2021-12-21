@@ -7,24 +7,22 @@ import jsPic from "../../assets/images/js.jpeg";
 
 const AppPage = () => {
   const [isDataComing, setIsDataComing] = useState([]);
-  let isNetResived = false;
   useEffect(() => {
-    if ("caches" in window) {
-      caches
-        .match("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json")
-        .then((res) => {
-          console.log("cache done ");
-          return res.json();
-        })
-        .then((data) => {
-          const array = [];
-          for (let key in data) {
-            array.push(data[key]);
-          }
-          setIsDataComing(array);
-        })
-        .then((log) => console.log("from cache"));
-    }
+    // if ("caches" in window) {
+    //   caches
+    //     .match("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json")
+    //     .then((res) => {
+    //       console.log(res);
+    //       return res.json();
+    //     })
+    //     .then((data) => {
+    //       const array = [];
+    //       for (let key in data) {
+    //         array.push(data[key]);
+    //       }
+    //       setIsDataComing(array);
+    //     });
+    // }
     fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json")
       .then((res) => res.json())
       .then((netData) => {
@@ -32,16 +30,15 @@ const AppPage = () => {
         for (let key in netData) {
           array.push(netData[key]);
         }
-        isNetResived = true;
         setIsDataComing(array);
-      })
-      .then((log) => console.log("form net new"));
+        console.log(array);
+      });
   }, []);
 
   return isDataComing.length > 0 ? (
     <Row lg={3} md={2} xs={1}>
       {isDataComing.map((item, index) => (
-        <Col style={{ padding: "10px auto" }}>
+        <Col key={index} style={{ padding: "10px auto" }}>
           <CustomeCard text={item.Text} title={item.Title} pic={item.Image} />
         </Col>
       ))}

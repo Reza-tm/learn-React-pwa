@@ -1,9 +1,15 @@
-const CACHE_VERSION = 6;
+importScripts("/dexie.js");
+
+var db = new Dexie("post-store");
+db.version(1).stores({
+  posts: "Title",
+});
+
+const CACHE_VERSION = 7;
 const CURRENT_CACHE = {
   static: "cache-static-" + CACHE_VERSION,
   dynamic: "cache-dynamic-" + CACHE_VERSION,
 };
-
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches
@@ -11,13 +17,13 @@ self.addEventListener("install", (e) => {
       .then((cache) =>
         cache.addAll([
           "/",
+          "/dexie.js",
           "/offline.html",
           "/static/js/bundle.js",
           "/build/react_devtools_backend.js",
           "/js/dom.js",
           "/js/js.js",
           "/sw.js",
-          "https://httpbin.org/get",
         ])
       )
   );
@@ -43,7 +49,14 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       caches.open(CURRENT_CACHE.dynamic).then((cache) => {
         return fetch(event.request).then((res) => {
-          cache.put(event.request, res.clone());
+          res
+            .clone()
+            .json()
+            .then((data) => {
+              for (let key in data) {
+                db.posts.put(data[key]);
+              }
+            });
           return res;
         });
       })

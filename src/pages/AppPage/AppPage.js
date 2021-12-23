@@ -22,7 +22,7 @@ const AppPage = () => {
   }, []);
 
   return isDataComing.length > 0 ? (
-    <Row lg={3} md={2} xs={1}>
+    <Row lg={3} md={2} xs={1} className="p-2">
       {isDataComing.map((item, index) => (
         <Col key={index} style={{ padding: "10px auto" }}>
           <CustomeCard text={item.Text} title={item.Title} pic={item.Image} />

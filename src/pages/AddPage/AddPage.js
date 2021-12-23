@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import { db } from "../../db";
 
 const AddPage = () => {
   const [title, setTitle] = useState("");
@@ -9,14 +10,35 @@ const AddPage = () => {
   const sendPost = () => {
     if (!title.trim() || !description.trim() || !img.trim()) {
       alert("please enter valid data");
+      return;
+    }
+
+    const dataForSend = {
+      Title: title,
+      Text: description,
+      Image: img,
+    };
+
+    if ("ServiceWorker" in window && "SyncManager" in window) {
+      navigator.serviceWorker.ready.then((sw) => {
+        sw.sync.register("sync-new-post");
+        console.log("sync new post is ready");
+        db.syncPost.put(dataForSend);
+      });
     } else {
-      alert("done");
-      console.log(title, description, img);
+      fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(dataForSend),
+      });
     }
   };
 
   return (
-    <div>
+    <div className="px-2">
       <Form>
         <InputGroup className="mb-3">
           <InputGroup.Text>Title</InputGroup.Text>

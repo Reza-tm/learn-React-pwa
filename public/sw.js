@@ -1,6 +1,6 @@
 importScripts("/dexie.js");
 importScripts("/db.js");
-const CACHE_VERSION = 7;
+const CACHE_VERSION = 1.3;
 const CURRENT_CACHE = {
   static: "cache-static-" + CACHE_VERSION,
   dynamic: "cache-dynamic-" + CACHE_VERSION,

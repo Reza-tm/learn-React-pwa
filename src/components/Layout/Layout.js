@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
               <Link to="/add">
                 <Nav.Item>
                   <Nav.Link as="p" eventKey="2">
-                    Add Page
+                    Add
                   </Nav.Link>
                 </Nav.Item>
               </Link>

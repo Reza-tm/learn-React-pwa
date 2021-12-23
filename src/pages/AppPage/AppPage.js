@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import CustomeCard from "../../components/Layout/Card/CustomeCard";
+import CustomeCard from "../../components/Card/CustomeCard";
 import { db } from "../../db";
 
 const AppPage = () => {

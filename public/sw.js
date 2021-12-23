@@ -1,6 +1,6 @@
 importScripts("/dexie.js");
 importScripts("/db.js");
-const CACHE_VERSION = 7;
+const CACHE_VERSION = 72;
 const CURRENT_CACHE = {
   static: "cache-static-" + CACHE_VERSION,
   dynamic: "cache-dynamic-" + CACHE_VERSION,
@@ -87,6 +87,15 @@ self.addEventListener("sync", (event) => {
               Accept: "application/json",
             },
             body: JSON.stringify(element),
+          }).then((res) => {
+            if (res.ok) {
+              console.log(element.id);
+              db.syncPost
+                .where({ Title: element.Title })
+                .delete()
+                .then(() => console.log("deleted ", element))
+                .catch((err) => console.log(err));
+            }
           });
         })
       )

@@ -17,6 +17,7 @@ const AddPage = () => {
       Title: title,
       Text: description,
       Image: img,
+      id: new Date().toISOString(),
     };
 
     if ("ServiceWorker" in window && "SyncManager" in window) {

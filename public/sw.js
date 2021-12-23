@@ -51,7 +51,6 @@ self.addEventListener("fetch", (event) => {
               for (let key in data) {
                 db.posts.put(data[key]);
               }
-              console.log(data);
             });
           return res;
         });
@@ -70,6 +69,26 @@ self.addEventListener("fetch", (event) => {
                 })
               )
               .catch((err) => caches.open(CURRENT_CACHE.static).then((response) => response.match("/offline.html")))
+      )
+    );
+  }
+});
+
+self.addEventListener("sync", (event) => {
+  if (event.tag == "sync-new-posts") {
+    console.log("yes");
+    event.waitUntil(
+      db.syncPost.toArray().then((res) =>
+        res.forEach((element) => {
+          fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(element),
+          });
+        })
       )
     );
   }

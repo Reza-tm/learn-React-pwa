@@ -20,12 +20,14 @@ const AddPage = () => {
     };
 
     if ("ServiceWorker" in window && "SyncManager" in window) {
+      console.log("sync event");
       navigator.serviceWorker.ready.then((sw) => {
-        sw.sync.register("sync-new-post");
+        sw.sync.register("sync-new-posts");
         console.log("sync new post is ready");
         db.syncPost.put(dataForSend);
       });
     } else {
+      console.log("internet event");
       fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json", {
         method: "POST",
         headers: {

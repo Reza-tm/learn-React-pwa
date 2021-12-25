@@ -1,6 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import Layout from "./components/Layout/Layout";
 import { Route, Routes } from "react-router-dom";
 import AddPage from "./pages/AddPage/AddPage";

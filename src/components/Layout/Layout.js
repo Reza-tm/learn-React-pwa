@@ -1,11 +1,18 @@
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Layout.scss";
 
 const Layout = ({ children }) => {
   const location = useLocation().pathname;
+
+  const notificationPermission = () => {
+    Notification.requestPermission((result) => {
+      console.log(result);
+    });
+  };
 
   return (
     <div>
@@ -33,6 +40,24 @@ const Layout = ({ children }) => {
         </Container>
       </Navbar>
       <Container style={{ padding: "20px 0" }}>{children}</Container>
+      <div
+        onClick={() => notificationPermission()}
+        style={{
+          position: "fixed",
+          right: 30,
+          bottom: 20,
+          backgroundColor: "#06b6d4",
+          height: "50px",
+          width: "50px",
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: "25px",
+          overflow: "hidden",
+          display: window.Notification ? "flex" : "none",
+        }}
+      >
+        <IoNotificationsOutline size={35} color="white" />
+      </div>
     </div>
   );
 };

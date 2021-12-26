@@ -12,6 +12,12 @@ const Layout = ({ children }) => {
     Notification.requestPermission((result) => {
       console.log(result);
     });
+    try {
+      new Notification("Wellcome to PWA Notification Club !");
+      console.log("ok");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

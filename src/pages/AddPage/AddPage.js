@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
 import { db } from "../../db";
 
@@ -12,6 +12,8 @@ const AddPage = () => {
       alert("please enter valid data");
       return;
     }
+
+    new Notification("hello");
 
     const dataForSend = {
       Title: title,

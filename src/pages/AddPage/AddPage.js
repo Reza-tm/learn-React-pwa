@@ -12,9 +12,6 @@ const AddPage = () => {
       alert("please enter valid data");
       return;
     }
-
-    new Notification("hello");
-
     const dataForSend = {
       Title: title,
       Text: description,
@@ -26,13 +23,22 @@ const AddPage = () => {
       console.log("sync event");
       const option = {
         body: "dont worry of You are offline ! your message will be send as soon as possible",
+        icon: "/android/android-launchericon-96-96.png",
+        image: dataForSend.Image,
+        dir: "rtl",
+        lang: "en-US",
+        vibrate: [100, 50, 200],
+        badge: "/android/android-launchericon-96-96.png",
       };
-      navigator.serviceWorker.ready.then((sw) => {
-        sw.showNotification("Your post will be post ! 🥳", option);
-        sw.sync.register("sync-new-posts");
-        console.log("sync new post is ready");
-        db.syncPost.put(dataForSend);
-      });
+      navigator.serviceWorker.ready
+        .then((sw) => {
+          sw.showNotification("Your post will be post ! 🥳", option);
+          sw.sync.register("sync-new-posts");
+          console.log("sync new post is ready");
+          db.syncPost.put(dataForSend);
+        })
+        .then((res) => alert("posted"))
+        .catch((err) => console.log("try again "));
     } else {
       console.log("internet event");
       fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json", {

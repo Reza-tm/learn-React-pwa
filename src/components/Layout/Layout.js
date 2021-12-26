@@ -12,8 +12,12 @@ const Layout = ({ children }) => {
     Notification.requestPermission((result) => {
       console.log(result);
     });
+    const option = {
+      body: "Wellcome to PWA Notification Club !",
+      icon: "/android/android-launchericon-96-96.png",
+    };
     try {
-      new Notification("Wellcome to PWA Notification Club !");
+      new Notification("Reza sobhgol", option);
       console.log("ok");
     } catch (error) {
       console.log(error);

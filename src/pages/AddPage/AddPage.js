@@ -24,7 +24,11 @@ const AddPage = () => {
 
     if ("ServiceWorker" in window && "SyncManager" in window) {
       console.log("sync event");
+      const option = {
+        body: "dont worry of You are offline ! your message will be send as soon as possible",
+      };
       navigator.serviceWorker.ready.then((sw) => {
+        sw.showNotification("Your post will be post ! 🥳", option);
         sw.sync.register("sync-new-posts");
         console.log("sync new post is ready");
         db.syncPost.put(dataForSend);

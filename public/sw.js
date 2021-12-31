@@ -76,10 +76,11 @@ self.addEventListener("fetch", (event) => {
 
 self.addEventListener("sync", (event) => {
   if (event.tag == "sync-new-posts") {
-    console.log("yes");
+    console.log("sync yes");
     event.waitUntil(
       db.syncPost.toArray().then((res) =>
         res.forEach((element) => {
+          console.log(element, "sync element");
           fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json", {
             method: "POST",
             headers: {
@@ -87,16 +88,18 @@ self.addEventListener("sync", (event) => {
               Accept: "application/json",
             },
             body: JSON.stringify(element),
-          }).then((res) => {
-            if (res.ok) {
-              console.log(element.id);
-              db.syncPost
-                .where({ Title: element.Title })
-                .delete()
-                .then(() => console.log("deleted ", element))
-                .catch((err) => console.log(err));
-            }
-          });
+          })
+            .then((res) => {
+              if (res.ok) {
+                console.log(element.id, "sync action done!");
+                db.syncPost
+                  .where({ Title: element.Title })
+                  .delete()
+                  .then(() => console.log("deleted ", element))
+                  .catch((err) => console.log(err));
+              }
+            })
+            .catch((err) => console.log(err, "sync faild"));
         })
       )
     );

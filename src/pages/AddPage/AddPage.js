@@ -9,12 +9,19 @@ const AddPage = () => {
   const [description, setDescription] = useState("");
   const [img, setImg] = useState("");
   const [file, setFile] = useState();
+  const [isFetched, setIsfetched] = useState(false);
 
   useEffect(() => {
     if (file) {
       uploadFile();
     }
   }, [file]);
+
+  useEffect(() => {
+    fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json")
+      .then(() => setIsfetched(true))
+      .catch(() => setIsfetched(false));
+  }, []);
 
   const uploadFile = () => {
     if (file) {
@@ -82,21 +89,26 @@ const AddPage = () => {
             placeholder="Enter your Description"
           />
         </InputGroup>
+
         <InputGroup className="mb-3">
           <InputGroup.Text>Image Url</InputGroup.Text>
           <FormControl value={img} onChange={(e) => setImg(e.target.value)} placeholder="Enter your Img url" />
         </InputGroup>
-        <p>OR</p>
-        <InputGroup className="mb-3">
-          <FormControl
-            type="file"
-            onChange={(e) => {
-              setFile(e.target.files[0]);
-              uploadFile();
-            }}
-            placeholder="Enter your Img url"
-          />
-        </InputGroup>
+        {isFetched && (
+          <>
+            <p>OR</p>
+            <InputGroup className="mb-3">
+              <FormControl
+                type="file"
+                onChange={(e) => {
+                  setFile(e.target.files[0]);
+                  uploadFile();
+                }}
+                placeholder="Enter your Img url"
+              />
+            </InputGroup>
+          </>
+        )}
         <div className="d-grid gap-2">
           <Button onClick={() => sendPost()} variant="primary">
             Send Post

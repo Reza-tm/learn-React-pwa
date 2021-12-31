@@ -56,11 +56,21 @@ const AddPage = () => {
         tag: "post-notification",
         renotify: true,
       };
-      navigator.serviceWorker.ready.then((sw) => {
-        sw.showNotification("Your post will be post ! 🥳", option);
-        db.syncPost.put(dataForSend);
-        sw.sync.register("sync-new-posts");
-      });
+      navigator.serviceWorker.ready
+        .then((sw) => {
+          sw.showNotification("Your post will be post ! 🥳", option);
+          db.syncPost.put(dataForSend);
+          sw.sync.register("sync-new-posts");
+        })
+        .then(() => {
+          console.log("hi");
+
+          setTitle("");
+          setDescription("");
+          setImg("");
+          setFile("");
+          setIsfetched("");
+        });
     } else {
       console.log("internet event");
       fetch("https://react-pwa-350e2-default-rtdb.europe-west1.firebasedatabase.app/Posts.json", {
@@ -70,6 +80,13 @@ const AddPage = () => {
           Accept: "application/json",
         },
         body: JSON.stringify(dataForSend),
+      }).then(() => {
+        console.log("hi");
+        setTitle("");
+        setDescription("");
+        setImg("");
+        setFile("");
+        setIsfetched("");
       });
     }
   };

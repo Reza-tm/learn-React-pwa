@@ -1,6 +1,7 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import CameraPicker from "../../components/CameraPicker/CameraPicker";
 import { db } from "../../db";
 import { storage } from "../../services/firebase";
 
@@ -44,7 +45,6 @@ const AddPage = () => {
     };
 
     if ("ServiceWorker" in window && "SyncManager" in window) {
-      console.log("sync event");
       const option = {
         body: "dont worry of You are offline ! your message will be send as soon as possible",
         icon: "/android/android-launchericon-96-96.png",
@@ -63,8 +63,6 @@ const AddPage = () => {
           sw.sync.register("sync-new-posts");
         })
         .then(() => {
-          console.log("hi");
-
           setTitle("");
           setDescription("");
           setImg("");
@@ -81,7 +79,6 @@ const AddPage = () => {
         },
         body: JSON.stringify(dataForSend),
       }).then(() => {
-        console.log("hi");
         setTitle("");
         setDescription("");
         setImg("");
@@ -126,6 +123,7 @@ const AddPage = () => {
             </InputGroup>
           </>
         )}
+        <CameraPicker />
         <div className="d-grid gap-2">
           <Button onClick={() => sendPost()} variant="primary">
             Send Post

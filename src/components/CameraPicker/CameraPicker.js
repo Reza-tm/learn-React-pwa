@@ -1,37 +1,61 @@
-import React, { useEffect, useRef, useState } from "react";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import React from "react";
+import { useState, useCallback, useRef } from "react";
+import Webcam from "react-webcam";
+import { storage } from "../../services/firebase";
+const CameraPicker = ({ imgUrlSetter }) => {
+  const [imgSrc, setImgSrc] = useState(null);
+  const webcamRef = useRef();
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    const id = new Date().toISOString() + ".png";
+    console.log(imageSrc);
+    const hello = dataURItoBlob(imageSrc);
 
-const CameraPicker = () => {
-  const videoRef = useRef();
-  const [isCameraAvailable, setIsCameraAvailable] = useState(false);
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        console.log();
-        console.log(videoRef.current.srcObject);
-        setIsCameraAvailable(true);
-      })
-      .catch((err) => {
-        setIsCameraAvailable(false);
-        console.log("camera error", err);
-      });
-  }, []);
+    const uploadFile = ref(storage, `img/${id}`);
+    uploadBytes(uploadFile, hello).then((res) => getDownloadURL(ref(storage, `img/${id}`)).then((url) => imgUrlSetter(url)));
+  }, [webcamRef, setImgSrc]);
+
+  function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(",")[1]);
+    var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    var blob = new Blob([ab], { type: mimeString });
+    return blob;
+  }
+
   return (
     <div
       style={{
-        display: isCameraAvailable ? "flex" : "none",
-        width: "200px",
+        display: "flex",
         marginRight: "auto",
         marginLeft: "auto",
-        height: "200px",
-        border: "3px solid #E9ECEF",
-        overflow: "hidden",
-        borderRadius: "150px",
+
         marginBottom: "13px",
       }}
     >
-      <video ref={videoRef} autoPlay />
+      <div
+        style={{
+          display: "flex",
+          width: "200px",
+          marginRight: "auto",
+          marginLeft: "auto",
+          overflow: "hidden",
+          height: "200px",
+          border: "3px solid #E9ECEF",
+          borderRadius: "150px",
+          marginBottom: "13px",
+        }}
+      >
+        <Webcam ref={webcamRef} screenshotFormat="image/png" />
+      </div>
+      <button type="button" onClick={capture}>
+        Capture photo
+      </button>
     </div>
   );
 };

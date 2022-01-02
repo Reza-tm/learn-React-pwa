@@ -123,7 +123,7 @@ const AddPage = () => {
             </InputGroup>
           </>
         )}
-        <CameraPicker />
+        <CameraPicker imgUrlSetter={setImg} />
         <div className="d-grid gap-2">
           <Button onClick={() => sendPost()} variant="primary">
             Send Post

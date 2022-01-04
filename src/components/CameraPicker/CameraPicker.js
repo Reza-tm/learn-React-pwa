@@ -1,6 +1,7 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React from "react";
 import { useState, useCallback, useRef } from "react";
+import { Button } from "react-bootstrap";
 import Webcam from "react-webcam";
 import { storage } from "../../services/firebase";
 const CameraPicker = ({ imgUrlSetter, modal }) => {
@@ -39,30 +40,25 @@ const CameraPicker = ({ imgUrlSetter, modal }) => {
     <div
       style={{
         display: "flex",
-        marginRight: "auto",
-        marginLeft: "auto",
-
+        justifyContent: "space-between",
         marginBottom: "13px",
       }}
     >
       <div
         style={{
           display: "flex",
-          width: "200px",
-          marginRight: "auto",
-          marginLeft: "auto",
           overflow: "hidden",
           height: "200px",
           border: "3px solid #E9ECEF",
-          borderRadius: "150px",
+          borderRadius: "15px",
           marginBottom: "13px",
         }}
       >
         <Webcam ref={webcamRef} screenshotFormat="image/png" />
       </div>
-      <button type="button" onClick={capture}>
+      <Button type="button" style={{ width: "200px" }} onClick={capture}>
         Capture photo
-      </button>
+      </Button>
     </div>
   );
 };

@@ -97,7 +97,9 @@ const AddPage = () => {
 
   return (
     <div className="px-2">
-      <Modal show={modal}>Loading</Modal>
+      <Modal centered show={modal}>
+        Loading
+      </Modal>
       <Form>
         <InputGroup className="mb-3">
           <InputGroup.Text>Title</InputGroup.Text>
@@ -129,9 +131,9 @@ const AddPage = () => {
                 placeholder="Enter your Img url"
               />
             </InputGroup>
+            <CameraPicker imgUrlSetter={setImg} modal={[modal, setModal]} />
           </>
         )}
-        <CameraPicker imgUrlSetter={setImg} modal={[modal, setModal]} />
         <div className="d-grid gap-2">
           <Button onClick={() => sendPost()} variant="primary">
             Send Post

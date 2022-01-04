@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Button, Form, FormControl, InputGroup, Modal } from "react-bootstrap";
 import CameraPicker from "../../components/CameraPicker/CameraPicker";
 import { db } from "../../db";
 import { storage } from "../../services/firebase";
@@ -11,9 +11,11 @@ const AddPage = () => {
   const [img, setImg] = useState("");
   const [file, setFile] = useState();
   const [isFetched, setIsfetched] = useState(false);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     if (file) {
+      setModal(true);
       uploadFile();
     }
   }, [file]);
@@ -27,7 +29,12 @@ const AddPage = () => {
   const uploadFile = () => {
     if (file) {
       const uploadFile = ref(storage, `img/${file.name}`);
-      uploadBytes(uploadFile, file).then((res) => getDownloadURL(ref(storage, `img/${file.name}`)).then((url) => setImg(url)));
+      uploadBytes(uploadFile, file).then((res) =>
+        getDownloadURL(ref(storage, `img/${file.name}`)).then((url) => {
+          setImg(url);
+          setModal(false);
+        })
+      );
     }
   };
 
@@ -90,6 +97,7 @@ const AddPage = () => {
 
   return (
     <div className="px-2">
+      <Modal show={modal}>Loading</Modal>
       <Form>
         <InputGroup className="mb-3">
           <InputGroup.Text>Title</InputGroup.Text>
@@ -123,7 +131,7 @@ const AddPage = () => {
             </InputGroup>
           </>
         )}
-        <CameraPicker imgUrlSetter={setImg} />
+        <CameraPicker imgUrlSetter={setImg} modal={[modal, setModal]} />
         <div className="d-grid gap-2">
           <Button onClick={() => sendPost()} variant="primary">
             Send Post

@@ -3,17 +3,24 @@ import React from "react";
 import { useState, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
 import { storage } from "../../services/firebase";
-const CameraPicker = ({ imgUrlSetter }) => {
+const CameraPicker = ({ imgUrlSetter, modal }) => {
+  const [_, setModal] = modal;
   const [imgSrc, setImgSrc] = useState(null);
   const webcamRef = useRef();
   const capture = useCallback(() => {
+    console.log("capture !");
+    setModal(true);
     const imageSrc = webcamRef.current.getScreenshot();
     const id = new Date().toISOString() + ".png";
-    console.log(imageSrc);
     const hello = dataURItoBlob(imageSrc);
 
     const uploadFile = ref(storage, `img/${id}`);
-    uploadBytes(uploadFile, hello).then((res) => getDownloadURL(ref(storage, `img/${id}`)).then((url) => imgUrlSetter(url)));
+    uploadBytes(uploadFile, hello).then((res) =>
+      getDownloadURL(ref(storage, `img/${id}`)).then((url) => {
+        imgUrlSetter(url);
+        setModal(false);
+      })
+    );
   }, [webcamRef, setImgSrc]);
 
   function dataURItoBlob(dataURI) {
